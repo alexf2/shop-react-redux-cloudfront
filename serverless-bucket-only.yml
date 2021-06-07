@@ -1,0 +1,66 @@
+service: node-aws-spa
+# org: Epam
+app: NodeInAws
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  lambdaHashingVersion: 20201221
+  # setup profile for AWS CLI.
+  # profile: node-aws
+  region: us-west-1
+
+plugins:
+  - serverless-finch
+  # 'serverless-single-page-app-plugin' is a custom plugin that located .serverless_plugins folder.
+  # Existing plugin (https://www.npmjs.com/package/serverless-single-page-app-plugin) doesn't have invalidate cache feature that often used during CI/CD events.
+  # How to build your own plugins: https://www.serverless.com/framework/docs/providers/aws/guide/plugins#service-local-plugin
+  - serverless-single-page-app-plugin
+
+custom:
+  ## Serverless-finch configuration
+  client:
+    bucketName: node-aws-react
+    distributionFolder: build
+    # indexDocument: index.html
+    # errorDocument: index.html
+    manageResources: false
+
+  ## Serverless-single-page-app-plugin configuration:
+  s3BucketName: ${self:custom.client.bucketName}
+  s3LocalPath: ${self:custom.client.distributionFolder}/
+
+resources:
+  Resources:
+    ## Specifying the S3 Bucket
+    WebAppS3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.s3BucketName}
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: index.html
+        VersioningConfiguration:
+          Status: Enabled
+
+    ## Specifying the policies to make sure all files inside the Bucket are avaialble to CloudFront
+    WebAppS3BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: WebAppS3Bucket
+        PolicyDocument:
+          Statement:
+            - Sid: 'AllowCloudFrontAccessIdentity'
+              Effect: Allow
+              Action: s3:GetObject
+              Resource: arn:aws:s3:::${self:custom.s3BucketName}/*
+              Principal:
+                AWS: "*"
+
+  Outputs:
+    WebAppS3BucketOutput:
+      Value: !Ref WebAppS3Bucket
