@@ -9,6 +9,8 @@
     npm run s3-client:build:deploy
 ```
 
+>UPD. S3-bucket "node-aws-react" удалён, так как по заданию bucket с сайтом в открытом доступе должен быть подчищен. Поэтому, http://node-aws-react.s3-website-us-west-1.amazonaws.com/ открываться теперь не будет. Если же открылся, то в баузере надо обновить страницу Ctrl+F5.
+
 ### 2. Фронт на основе CloudFront
 [CDN: d1c0lxidfgv32b.cloudfront.net](http://d1c0lxidfgv32b.cloudfront.net).
 [S3 Bucket: node-aws-react-front.s3-website-us-west-1.amazonaws.com](http://node-aws-react-front.s3-website-us-west-1.amazonaws.com/)
