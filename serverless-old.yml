@@ -1,10 +1,11 @@
-service: node-in-aws-web
+service: node-aws-spa
 
 frameworkVersion: '2'
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs14.x
+  lambdaHashingVersion: 20201221
   # setup profile for AWS CLI.
   # profile: node-aws
 
@@ -17,7 +18,7 @@ plugins:
 
 custom:
   client:
-    bucketName: node-in-aws-web-bucket
+    bucketName: node-aws-react-front
     distributionFolder: build
   s3BucketName: ${self:custom.client.bucketName}
 

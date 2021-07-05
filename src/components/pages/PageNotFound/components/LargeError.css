@@ -1,0 +1,23 @@
+.large-error__box {
+    margin-top: 234px;
+    text-align: center;
+    width: 100%;
+}
+
+.large-error__header {
+    font-size: 30px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 24px;
+}
+
+.large-error__comment {
+    font-size: 18px;
+    color: #333333;
+}
+
+.large-error__lines {
+    fill: none;
+    stroke: black;
+    stroke-width: 4px;
+}
